@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cat & Phol Wedding Invitation</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html {
+            scroll-behavior: smooth;
+            background-color: #d7cdbf; /* สีพื้นหลังหน้าจอคอมพิวเตอร์ */
+        }
+        body {
+            font-family: 'Noto Sans Thai', sans-serif;
+            color: #4a3b32;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ล็อกกรอบหน้าจอมือถือ (Mobile Viewport) */
+        .mobile-container {
+            width: 100%;
+            max-width: 414px;
+            min-height: 100vh;
+            background-color: #f4efe9; /* พื้นหลังการ์ดสีเอิร์ทโทน */
+            box-shadow: 0 0 40px rgba(74, 59, 50, 0.2);
+            position: relative;
+        }
+
+        /* ------------------------------------------------------------
+           [ลูกเล่นหน้าแรก] หน้าปกซองจดหมาย (Interactive Envelope)
+        ------------------------------------------------------------ */
+        .envelope-overlay {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #f4efe9;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            transition: opacity 0.8s ease, pointer-events 0.8s ease;
+        }
+        /* เมื่อกดเปิด ให้ซองจดหมายจางหายไป */
+        .envelope-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .envelope-title {
+            font-family: 'Italiana', serif;
+            font-size: 2.2rem;
+            color: #36281e;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        /* รูปภาพซองจดหมายตรงกลาง */
+        .envelope-pic {
+            width: 80%;
+            max-width: 260px;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 10px 20px rgba(74,59,50,0.15));
+        }
+        .btn-open {
+            font-family: 'Italiana', serif;
+            background: #ffffff;
+            color: #5c4d42;
+            border: 1px solid #eadecf;
+            padding: 10px 35px;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: all 0.3s;
+        }
+        .btn-open:hover {
+            background: #5c4d42;
+            color: #ffffff;
+        }
+
+        /* ------------------------------------------------------------
+           [เนื้อหาด้านใน] จัดเป็นหน้ายาวเลื่อนลงมา
+        ------------------------------------------------------------ */
+        .main-content {
+            display: none; /* ซ่อนเนื้อหาหลักไว้ก่อน แขกกดเปิดซองค่อยแสดง */
+        }
+        .main-content.show {
+            display: block;
+        }
+
+        .page-section {
+            width: 100%;
+            padding: 60px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        /* หน้าการ์ดใบแรกด้านใน */
+        .card-inner-box {
+            background: #ffffff;
+            width: 100%;
+            padding: 50px 30px;
+            border-radius: 4px;
+            border: 1px solid #eadecf;
+            box-shadow: 0 4px 20px rgba(74, 59, 50, 0.02);
+        }
+
+        .section-header {
+            font-family: 'Italiana', serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #8c7662;
+            margin-bottom: 30px;
+        }
+
+        .main-couple-names {
+            font-family: 'Italiana', serif;
+            font-size: 2.8rem;
+            color: #36281e;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .main-couple-names span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            display: block;
+            margin: 5px 0;
+            color: #8c7662;
+            font-style: italic;
+        }
+        .main-couple-nicknames {
+            font-size: 1.1rem;
+            color: #8c7662;
+            letter-spacing: 3px;
+            margin-bottom: 35px;
+        }
+
+        /* รูปภาพพรีเวดดิ้ง / รูปคู่ */
+        .photo-frame {
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto 35px auto;
+            border: 8px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(74, 59, 50, 0.08);
+        }
+        .photo-frame img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        .wedding-date-highlight {
+            font-family: 'Italiana', serif;
+            font-size: 1.8rem;
+            color: #36281e;
+            border-top: 1px solid #eadecf;
+            border-bottom: 1px solid #eadecf;
+            padding: 10px 0;
+            margin: 25px 0;
+            letter-spacing: 1px;
+        }
+
+        /* ------------------------------------------------------------
+           [หน้าย่อยถัดๆ ไป] ระบบเลื่อนหน้าจอพร้อมเอฟเฟกต์ Scroll Reveal
+        ------------------------------------------------------------ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-family: 'Italiana', serif;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            color: #36281e;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 1px;
+            background: #8c7662;
+            margin: 12px auto 0 auto;
+        }
+
+        /* กำหนดการ (Timeline) */
+        .timeline-box {
+            width: 100%;
+        }
+        .timeline-step {
+            margin-bottom: 35px;
+        }
+        .timeline-time {
+            font-family: 'Italiana', serif;
+            font-size: 1.4rem;
+            color: #36281e;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: #6e5d51;
+        }
+
+        /* ปุ่มกดดีไซน์แพงๆ คลีนๆ */
+        .action-btn {
+            font-family: 'Italiana', serif;
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #5c4d42;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            transition: background 0.3s;
+        }
+        .action-btn:hover {
+            background: #36281e;
+        }
+        .action-btn-outline {
+            background: transparent;
+            color: #5c4d42;
+            border: 1px solid #5c4d42;
+        }
+
+        /* แกลเลอรีรูปแนวไอจี/ติ๊กต็อก */
+        .gallery-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+        .gallery-photo {
+            width: 100%;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #eadecf;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .gallery-photo img {
+            width: 100%;
+            display: block;
+        }
+
+        .scroll-indicator {
+            font-family: 'Italiana', serif;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: #a69482;
+            margin-top: 25px;
+            animation: moveDown 2s infinite;
+        }
+        @keyframes moveDown {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(6px); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-container">
+
+        <div class="envelope-overlay" id="envelopeSection">
+            <div class="envelope-title">THOSSAPHOL & PINON</div>
+            
+            <img class="envelope-pic" src="https://cdn-icons-png.flaticon.com/512/5721/5721915.png" alt="Envelope Icon">
+            
+            <button class="btn-open" onclick="openEnvelope()">OPEN</button>
+        </div>
+
+
+        <div class="main-content" id="mainContent">
+            
+            <section class="page-section">
+                <div class="card-inner-box">
+                    <div class="section-header">Wedding Invitation</div>
+                    
+                    <div class="main-couple-names">
+                        Thossaphol <br>
+                        <span>&</span>
+                        Pinon
+                    </div>
+                    <div class="main-couple-nicknames">( CAT & PHOL )</div>
+
+                    <div class="photo-frame">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600" alt="Main Couple Photo">
+                    </div>
+
+                    <p style="font-size: 0.95rem; color: #5c4d42; line-height: 1.8;">มีความยินดีขอเรียนเชิญร่วมงานฉลองมงคลสมรส</p>
+                    <div class="wedding-date-highlight">14 . 11 . 2026</div>
+                    <p style="font-size: 0.95rem; color: #5c4d42;">ณ ห้องแกรนด์บอลรูม โรงแรมพูลแมน แบงค็อก</p>
+                    
+                    <div class="scroll-indicator">SCROLL DOWN ↓</div>
+                </div>
+            </section>
+
+            <section class="page-section reveal">
+                <h2 class="section-title">Our Schedule</h2>
+                <div class="timeline-box">
+                    <div class="timeline-step">
+                        <div class="timeline-time">16:00 PM</div>
+                        <div class="timeline-desc">ต้อนรับแขกผู้มีเกียรติ และลงทะเบียน</div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-time">17:00 PM</div>
+                        <div class="timeline-desc">พิธีหมั้น / สวมแหวนหมั้น</div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-time">18:00 PM</div>
+                        <div class="timeline-desc">พิธีฉลองมงคลสมรส และร่วมรับประทานอาหาร</div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-time">19:30 PM</div>
+                        <div class="timeline-desc">พิธีตัดเค้กแต่งงาน และดึงริบบิ้นดอกไม้</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section reveal">
+                <h2 class="section-title">Location & RSVP</h2>
+                <p style="margin-bottom: 30px; font-size: 0.95rem; line-height: 1.8;">เพื่อความสะดวกในการเดินทางและการจัดเตรียมที่นั่ง ขอความกรุณาแขกผู้มีเกียรติเปิดดูแผนที่และกดตอบรับเข้าร่วมงานล่วงหน้า</p>
+                
+                <a href="https://maps.google.com" target="_blank" class="action-btn">VIEW LOCATION</a>
+                <a href="https://forms.google.com" target="_blank" class="action-btn action-btn-outline">RSVP ATTENDANCE</a>
+            </section>
+
+            <section class="page-section reveal">
+                <h2 class="section-title">Our Gallery</h2>
+                <div class="gallery-vertical">
+                    <div class="gallery-photo">
+                        <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=600" alt="Gallery 1">
+                    </div>
+                    <div class="gallery-photo">
+                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=600" alt="Gallery 2">
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        // ฟังก์ชันเมื่อแขกกดปุ่ม OPEN
+        function openEnvelope() {
+            const envelope = document.getElementById('envelopeSection');
+            const mainContent = document.getElementById('mainContent');
+            
+            // 1. แสดงเนื้อหาหลักในเบื้องหลังก่อน
+            mainContent.classList.add('show');
+            
+            // 2. สั่งให้ซองจดหมายค่อยๆ จางออก
+            envelope.classList.add('fade-out');
+            
+            // 3. พอจางหายสนิท ให้เอา element ซองจดหมายออกจากหน้าจอเพื่อจะได้เลื่อนดูได้
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                revealElements(); // เช็กแอนิเมชันหน้าแรกทันที
+            }, 800);
+        }
+
+        // ระบบจับการ Scroll เพื่อแสดงเอฟเฟกต์เฟดตอนเลื่อนลง
+        function revealElements() {
+            const reveals = document.querySelectorAll(".reveal");
+            const windowHeight = window.innerHeight;
+
+            reveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add("active");
+                }
+            });
+        }
+
+        window.addEventListener("scroll", revealElements);
+    </script>
+</body>
+</html>
